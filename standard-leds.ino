@@ -30,8 +30,11 @@
 #define	STD_LED_ICE_BLUE	  0xFFD827
 
 const unsigned long std_led_rotationRate = 1000;
-unsigned long std_led_lastChangeTime = 0;
+const unsigned long std_led_blinkRate = 300;
+unsigned long std_led_lastRenderTime = 0;
 int std_led_currentColor = 0;
+
+bool std_led_on = true;
 
 const long std_led_colors[6] = {
   STD_LED_RED,
@@ -48,11 +51,12 @@ void std_led_setup() {
   Serial.println("Setup standard leds");
   std_led_channel.begin(STD_LED_PIN);
   // TODO turn on
+  std_led_changeColor(std_led_colors[0]); // set to first color
 }
 
 void std_led_animateRotation() {
   unsigned long currentTime = millis();
-  if (currentTime - std_led_lastChangeTime >= std_led_rotationRate) {
+  if (currentTime - std_led_lastRenderTime >= std_led_rotationRate) {
     std_led_currentColor++;
     int numColors = sizeof(std_led_colors) / sizeof(std_led_colors[0]);
     if (std_led_currentColor >= numColors) std_led_currentColor = 0;
@@ -60,9 +64,26 @@ void std_led_animateRotation() {
   }
 }
 
+void sts_led_animateBlink(State score) {
+  unsigned long currentTime = millis();
+  if (currentTime - std_led_lastRenderTime >= std_led_blinkRate) {
+    if (std_led_on) {
+      std_led_setState(score);
+      std_led_on = false;
+    } else {
+      std_led_changeColor(STD_LED_PURPLE);
+      std_led_on = true;
+    }
+  }
+}
+
+void std_led_off() {
+  std_led_changeColor(STD_LED_PINK_PURPLE); // TODO turn off
+}
+
 void std_led_changeColor(long color) {
   std_led_channel.writeCommand(color);
-  std_led_lastChangeTime = millis();
+  std_led_lastRenderTime = millis();
 }
 
 void std_led_setState(State state) {
@@ -72,4 +93,9 @@ void std_led_setState(State state) {
   if (state == 4) std_led_changeColor(STD_LED_ROSE);
   if (state == 5) std_led_changeColor(STD_LED_LIGHT_ORANGE);
   if (state == 6) std_led_changeColor(STD_LED_ICE_BLUE);
+}
+
+void std_led_reset() {
+  std_led_on = true;
+  // TODO turn on
 }

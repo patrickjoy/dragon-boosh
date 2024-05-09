@@ -50,9 +50,6 @@ void setup() {
 }
 
 void loop() {
-  // currentState = RESET;
-  // currentScore = SIX;
-  // Serial.println("Hello");
   // Serial.print("Current state: ");
   // Serial.println(currentState);
   // Serial.print("Score: ");
@@ -65,8 +62,8 @@ void loop() {
       // if (!playing) {
       //   mp3_playNextSong(); // play next song
       // }
-      State state = sensor_checkPins(currentState); // check hall effects
-      // State state = sensor_test(currentState);
+      // State state = sensor_checkPins(currentState); // check hall effects
+      State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
@@ -77,8 +74,8 @@ void loop() {
     case FIVE: { // hall effects 1-5
       addr_led_setState(currentState); // light up addressable leds based on state
       std_led_animateRotation(); 
-      State state =  sensor_checkPins(currentState); // check hall effects
-      // State state = sensor_test(currentState);
+      // State state =  sensor_checkPins(currentState); // check hall effects
+      State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
@@ -95,9 +92,10 @@ void loop() {
       }
       // play sound effects
       mp3_playCelebration(score);
-      std_led_setState(score); // light up standard leds based on score
-      addr_led_animateBlink(score); // blink addressable leds
-      // blink standard leds
+      // led_ctl_animateBlink(score); // blink leds together
+      addr_led_animateBlink(score);
+      sts_led_animateBlink(score);
+      
       resetWhenReady();
       break;
     }
@@ -109,7 +107,8 @@ void resetWhenReady() {
   unsigned long currentTime = millis();
   if (currentTime - lastStateUpdate >= resetTime) {
     boosh_reset(); // reset boosh
-    addr_led_reset(); // reset leds
+    addr_led_reset(); // reset addressable leds
+    std_led_reset(); // reset standard leds
     mp3_reset(); // reset mp3
     score = READY; // reset score
     changeState(READY); // reset state
