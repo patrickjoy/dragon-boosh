@@ -47,24 +47,28 @@ void setup() {
 
   addr_led_setState(SIX); // This sets the full pattern to cycle
   // mp3_playRandomSong(); // play first song
+  mp3_playSong(12);
 }
 
 void loop() {
+  unsigned long startTime = millis();
   // Serial.print("Current state: ");
   // Serial.println(currentState);
   // Serial.print("Score: ");
   // Serial.println(score);
+  // score = SIX;
+  // currentState = RESET;
   switch (currentState) {
     case READY: { // loop
-      addr_led_animateSnake();
-      std_led_animateRotation(); 
-      // bool playing = mp3_isPlaying(); // check music status
-      // if (!playing) {
-      //   mp3_playNextSong(); // play next song
-      // }
-      // State state = sensor_checkPins(currentState); // check hall effects
-      State state = sensor_test(currentState);
-      checkForUpdate(state);
+      addr_led_animateSnake(); // 4 milliseconds
+      std_led_animateRotation(); // 71 milli seconds every second
+      bool playing = mp3_isPlaying(); // check music status
+      if (!playing) {
+        mp3_playNextSong(); // play next song (costs 8 milliseconds every 4 minutes)
+      }
+      State state = sensor_checkPins(currentState); // check hall effects
+      // State state = sensor_test(currentState);
+      // checkForUpdate(state);
       break;
     }
     case ONE:
@@ -72,14 +76,16 @@ void loop() {
     case THREE:
     case FOUR:
     case FIVE: { // hall effects 1-5
+      Serial.println("do the thing");
       addr_led_setState(currentState); // light up addressable leds based on state
       std_led_animateRotation(); 
-      // State state =  sensor_checkPins(currentState); // check hall effects
-      State state = sensor_test(currentState);
+      State state =  sensor_checkPins(currentState); // check hall effects
+      // State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
     case SIX: { // hall effect 6
+      Serial.println("boosh");
       score = currentState;
       std_led_animateRotation(); 
       addr_led_setState(currentState); // light up addressable leds based on state
@@ -87,6 +93,7 @@ void loop() {
       break;
     }
     case RESET: {
+      Serial.println("reset");
       if (score == SIX) {
         boosh();
       }
@@ -95,12 +102,17 @@ void loop() {
       // led_ctl_animateBlink(score); // blink leds together
       addr_led_animateBlink(score);
       sts_led_animateBlink(score);
-      
+
       resetWhenReady();
       break;
     }
   }
   // incrementState();
+  unsigned long totalLength = millis() - startTime;
+  if (totalLength > 5) {
+    Serial.print("Loop time: ");
+    Serial.println(totalLength);
+  }
 }
 
 void resetWhenReady() {
