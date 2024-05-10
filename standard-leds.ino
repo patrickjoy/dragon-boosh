@@ -1,9 +1,7 @@
 #define STD_LED_PIN 12
 
-// #define	STD_LED_VPlus      0xFF3AC5
-// #define	STD_LED_VMinus 0xFFBA45
-// #define	STD_LED_LED_ON 	  0xFF827D
-// #define	STD_LED_LED_OFF 	  0xFF02FD
+#define	STD_LED_OFF 	  0xFF827D
+#define	STD_LED_ON 	  0xFF02FD
 
 #define	STD_LED_RED	  0xFF1AE5
 #define	STD_LED_DARK_ORANGE	  0xFF2AD5
@@ -30,7 +28,7 @@
 #define	STD_LED_ICE_BLUE	  0xFFD827
 
 const unsigned long std_led_rotationRate = 1000;
-const unsigned long std_led_blinkRate = 300;
+const unsigned long std_led_blinkRate = 300; // 150 minimum
 unsigned long std_led_lastRenderTime = 0;
 int std_led_currentColor = 0;
 
@@ -50,8 +48,12 @@ LedStripController std_led_channel;
 void std_led_setup() {
   Serial.println("Setup standard leds");
   std_led_channel.begin(STD_LED_PIN);
-  // TODO turn on
+  std_led_changeColor(STD_LED_ON);
   std_led_changeColor(std_led_colors[0]); // set to first color
+
+  // while(true) {
+  //   sts_led_animateBlink(ONE);
+  // }
 }
 
 void std_led_animateRotation() {
@@ -67,22 +69,27 @@ void std_led_animateRotation() {
 void sts_led_animateBlink(State score) {
   unsigned long currentTime = millis();
   if (currentTime - std_led_lastRenderTime >= std_led_blinkRate) {
-    if (std_led_on) {
+    if (!std_led_on) {
+      std_led_turn_on();
       std_led_setState(score);
-      std_led_on = false;
-    } else {
-      std_led_changeColor(STD_LED_PURPLE);
       std_led_on = true;
+    } else {
+      std_led_turn_off();
+      std_led_on = false;
     }
   }
 }
 
-void std_led_off() {
-  std_led_changeColor(STD_LED_PINK_PURPLE); // TODO turn off
+void std_led_turn_on() {
+  std_led_changeColor(STD_LED_ON);
+}
+
+void std_led_turn_off() {
+  std_led_changeColor(STD_LED_OFF);
 }
 
 void std_led_changeColor(long color) {
-  std_led_channel.writeCommand(color);
+  std_led_channel.writeCommand(color); // 71 millisecond operation
   std_led_lastRenderTime = millis();
 }
 
@@ -97,5 +104,6 @@ void std_led_setState(State state) {
 
 void std_led_reset() {
   std_led_on = true;
-  // TODO turn on
+  std_led_changeColor(STD_LED_ON);
+  std_led_changeColor(STD_LED_RED);
 }

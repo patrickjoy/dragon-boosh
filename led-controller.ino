@@ -11,7 +11,7 @@ void led_ctl_animateBlink(State score) {
       addr_led_setState(score);
       led_ctl_on = false;
     } else {
-      std_led_off();
+      std_led_turn_off();
       addr_led_off();
       led_ctl_on = true;
     }
