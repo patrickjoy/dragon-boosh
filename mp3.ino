@@ -8,15 +8,43 @@
 #define MP3_PLAY_X_INDEX      0x03 // Play X file (1-255)
 #define MP3_SET_VOLUME        0x06 // 0 - 30
 
-#define MP3_FIRST_SONG 1 // first song, starting at index 1
+#define MP3_FIRST_SONG 29 // first song, starting at index 1
 
-const int mp3_numSongs = 5;
-unsigned long mp3_songLengths[5] = {
-  1000, // Song 1
-  1000, // Song 2
-  1000, // Song 3
-  1000, // Song 4
-  1000, // Song 5
+const int mp3_numSongs = 33;
+unsigned long mp3_songLengths[33] = {
+  253000, // Song 1 // 240 + 13
+  322000, // Song 2 // 300 + 22
+  252000, // Song 3 // 240 + 12
+  269000, // Song 4 // 240 + 29
+  350000, // Song 5 // 300 + 50
+  265000, // Song 6 // 240 + 25
+  340000, // Song 7 // 300 + 40
+  354000, // Song 8 // 300 + 54
+  327000, // Song 9 // 300 + 27
+  256000, // Song 10 // 240 + 16
+  249000, // Song 11 // 240 + 09
+  84000, // Song 12 // 60 + 24
+  271000, // Song 13 // 240 + 31
+  492000, // Song 14 // 480 + 12
+  667000, // Song 15 // 660 + 07
+  168000, // Song 16 // 120 + 48
+  152000, // Song 17 // 120 + 32
+  324000, // Song 18 // 300 + 24
+  412000, // Song 19 // 360 + 52
+  408000, // Song 20 // 360 + 48
+  115000, // Song 21 // 60 + 55
+  345000, // Song 22 // 300 + 45
+  28000, // Song 23 dragon
+  2800, // Song 24 horse
+  28000, // Song 25 ox
+  28000, // Song 26 rat
+  28000, // Song 27 rooster
+  28000, // Song 28 tiger
+  1000, // Song 29 one
+  1000, // Song 30 two
+  1000, // Song 31 three
+  1000, // Song 32 four
+  1000, // Song 33 five
 };
 
 int mp3_currentSong = MP3_FIRST_SONG;
@@ -41,8 +69,9 @@ void mp3_setVolume(int volume) {
 }
 
 void mp3_playNextSong() {
+  Serial.println("Play next song");
   if (mp3_currentSong >= mp3_numSongs) {
-    mp3_playSong(1);
+    mp3_playSong(29);
   } else {
     mp3_playSong(mp3_currentSong + 1);
   }
