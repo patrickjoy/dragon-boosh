@@ -6,8 +6,7 @@
 
 #define BAUD_RATE 9600
 
-enum State
-{
+enum State {
   READY = 0,
   ONE = 1,
   TWO = 2,
@@ -18,8 +17,7 @@ enum State
   RESET = 7,
 };
 
-enum Response
-{
+enum Response {
   STOPPED = 0,
   PLAYING = 1,
   PAUSED = 2,
