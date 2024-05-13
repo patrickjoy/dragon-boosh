@@ -28,8 +28,9 @@ enum Response
   UNRECOGNIZED = -2
 };
 
-const unsigned long stateTimeout = 5000;
-const unsigned long resetTime = 4000;
+// Rates
+const unsigned long stateTimeout = 500; // TODO (set to 500)
+const unsigned long resetTime = 5000; // TODO (songs are 28 seconds long)
 unsigned long lastStateUpdate = 0;
 
 State currentState = READY;
@@ -39,32 +40,35 @@ void setup() {
   Serial.begin(BAUD_RATE);
   Serial.println("Begin");
 
+  // randomSeed(analogRead(0)); // set random seed // TODO can't set random because we have no more analogue pins
+
   mp3_setup();
   sensor_setup();
   addr_led_setup();
   std_led_setup();
   boosh_setup();
 
-  addr_led_setState(SIX); // This sets the full pattern to cycle
-  // mp3_playRandomSong(); // play first song
-  mp3_playSong(12);
+  addr_led_reset(); // turn on and set to default state
+  std_led_reset(); // turn on and set to default color
+  mp3_playRandomSong(); // play first song
+  // mp3_playSong(12);
 }
 
 void loop() {
-  unsigned long startTime = millis();
-  // Serial.print("Current state: ");
-  // Serial.println(currentState);
+  // unsigned long startTime = millis();
+  Serial.print("Current state: ");
+  Serial.println(currentState);
   // Serial.print("Score: ");
   // Serial.println(score);
   // score = SIX;
   // currentState = RESET;
   switch (currentState) {
     case READY: { // loop
-      addr_led_animateSnake(); // 4 milliseconds
-      std_led_animateRotation(); // 71 milli seconds every second
-      bool playing = mp3_isPlaying(); // check music status
+      // addr_led_animateSnake(); // 4 milliseconds
+      // std_led_animateRotation(); // 71 milli seconds every second
+      bool playing = mp3_checkPlaying(); // check music status
       if (!playing) {
-        mp3_playNextSong(); // play next song (costs 8 milliseconds every 4 minutes)
+        mp3_playRandomSong(); // 8 milliseconds
       }
       State state = sensor_checkPins(currentState); // check hall effects
       // State state = sensor_test(currentState);
@@ -76,29 +80,28 @@ void loop() {
     case THREE:
     case FOUR:
     case FIVE: { // hall effects 1-5
-      Serial.println("do the thing");
-      addr_led_setState(currentState); // light up addressable leds based on state
-      std_led_animateRotation(); 
+      // addr_led_setState(currentState);
+      // std_led_animateRotation(); 
       State state =  sensor_checkPins(currentState); // check hall effects
       // State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
     case SIX: { // hall effect 6
-      Serial.println("boosh");
+      // Serial.println("boosh");
       score = currentState;
-      std_led_animateRotation(); 
-      addr_led_setState(currentState); // light up addressable leds based on state
+      // std_led_animateRotation(); 
+      // addr_led_setState(currentState); // light up addressable leds based on state
       changeState(RESET);
       break;
     }
     case RESET: {
-      Serial.println("reset");
       if (score == SIX) {
+        // boosh_longBurst();
+        // boosh_shortBursts();
         boosh();
       }
-      // play sound effects
-      mp3_playCelebration(score);
+      mp3_playCelebration(score); // play sound effects
       // led_ctl_animateBlink(score); // blink leds together
       addr_led_animateBlink(score);
       sts_led_animateBlink(score);
@@ -108,11 +111,12 @@ void loop() {
     }
   }
   // incrementState();
-  unsigned long totalLength = millis() - startTime;
-  if (totalLength > 5) {
-    Serial.print("Loop time: ");
-    Serial.println(totalLength);
-  }
+  // unsigned long totalLength = millis() - startTime;
+  // if (totalLength > 5) {
+    // Serial.print("Loop time: ");
+    // Serial.println(totalLength);
+    // Serial.println(startTime);
+  // }
 }
 
 void resetWhenReady() {
@@ -127,26 +131,40 @@ void resetWhenReady() {
   }
 }
 
+// OLD CODE - EXPECTS STATE TO ONLY INCREAE
+// void checkForUpdate(State state) {
+//   if (state != currentState) {
+//     score = state;
+//     changeState(state);
+//   } else if (checkTimeout(state)) {
+//     changeState(RESET);
+//   }
+// }
+
 void checkForUpdate(State state) {
-  if (state != currentState) {
+  if (state == currentState) {
+    checkTimeout(state);
+  } else if (state > currentState) {
     score = state;
     changeState(state);
-  } else if (isTimedout(state)) {
+  } else if (state < currentState) {
+    changeState(RESET);
+  }
+}
+
+void checkTimeout(State state) {
+  unsigned long currentTime = millis();
+  if ((currentTime - lastStateUpdate >= stateTimeout) && (state != READY)) {
+    // Serial.println("Timedout");
     changeState(RESET);
   }
 }
 
 void changeState(State state) {
+  // Serial.print("Changing to state: ");
+  // Serial.println(state);
   currentState = state;
   lastStateUpdate = millis();
-}
-
-bool isTimedout(State state) {
-  unsigned long currentTime = millis();
-  if ((currentTime - lastStateUpdate >= stateTimeout) && (state != READY)) {
-    return true;
-  }
-  return false;
 }
 
 void incrementState() {

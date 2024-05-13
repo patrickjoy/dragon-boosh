@@ -1,5 +1,7 @@
 #define STD_LED_PIN 12
 
+#define	STD_LED_VPLUS  0xFF3AC5
+#define	STD_LED_VMINUS 0xFFBA45
 #define	STD_LED_OFF 	  0xFF827D
 #define	STD_LED_ON 	  0xFF02FD
 
@@ -45,15 +47,12 @@ const long std_led_colors[6] = {
 
 LedStripController std_led_channel;
 
+int count = 0;
 void std_led_setup() {
   Serial.println("Setup standard leds");
   std_led_channel.begin(STD_LED_PIN);
   std_led_changeColor(STD_LED_ON);
-  std_led_changeColor(std_led_colors[0]); // set to first color
-
-  // while(true) {
-  //   sts_led_animateBlink(ONE);
-  // }
+  std_led_changeColor(STD_LED_RED);
 }
 
 void std_led_animateRotation() {
@@ -103,7 +102,7 @@ void std_led_setState(State state) {
 }
 
 void std_led_reset() {
-  std_led_on = true;
   std_led_changeColor(STD_LED_ON);
   std_led_changeColor(STD_LED_RED);
+  std_led_on = true;
 }
