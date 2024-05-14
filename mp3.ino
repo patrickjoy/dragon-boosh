@@ -44,14 +44,20 @@ unsigned long mp3_songLengths[33] = {
   1000, // Song 33 five
 };
 
-const int mp3_lastSong = 22;
-const int mp3_numSounds = 33;
-
-int mp3_currentSong = 1; // index starts at 1
-bool mp3_celebrationPlayed = false;
 unsigned long mp3_songStartedTime;
 
+const int mp3_lastSong = 22;
+const int mp3_numSounds = 33;
+int mp3_currentSong = 1; // index starts at 1
+
+bool mp3_celebrationPlayed = false;
+
 SoftwareSerial mp3(MP3_TX_PIN, MP3_RX_PIN);
+
+void mp3_reset() {
+  mp3_celebrationPlayed = false;
+  mp3_playRandomSong();
+}
 
 void mp3_setup() {
   Serial.println("Setup mp3 player");
@@ -107,11 +113,6 @@ bool mp3_checkPlaying() {
     return false;
   }
   return true;
-}
-
-void mp3_reset() {
-  mp3_celebrationPlayed = false;
-  mp3_playRandomSong();
 }
 
 void mp3_sendCommand(int8_t command) {

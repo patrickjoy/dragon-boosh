@@ -28,7 +28,7 @@ enum Response {
 
 // Rates
 const unsigned long stateTimeout = 500; // TODO (set to 500)
-const unsigned long resetTime = 5000; // TODO (songs are 28 seconds long)
+const unsigned long resetTime = 10000; // TODO (songs are 28 seconds long)
 unsigned long lastStateUpdate = 0;
 
 State currentState = READY;
@@ -38,7 +38,8 @@ void setup() {
   Serial.begin(BAUD_RATE);
   Serial.println("Begin");
 
-  // randomSeed(analogRead(0)); // set random seed // TODO can't set random because we have no more analogue pins
+  int pin_0 = analogRead(0);
+  randomSeed(pin_0 * 100); // set random seed
 
   mp3_setup();
   sensor_setup();
@@ -46,16 +47,53 @@ void setup() {
   std_led_setup();
   boosh_setup();
 
-  addr_led_reset(); // turn on and set to default state
-  std_led_reset(); // turn on and set to default color
   mp3_playRandomSong(); // play first song
-  // mp3_playSong(12);
+
+  /* 
+    TODO remove testing
+  */
+  // delay(500);
+  // while(true) {
+    // score = SIX;
+
+    /*
+      test colors
+    */
+    // std_led_changeColor(0xFF22DD);
+
+    /* 
+      state tests
+    */
+    // addr_led_setState(THREE);
+    // std_led_setState(score);
+ 
+
+    /*
+      blink tests
+    */
+    // addr_led_animateBlink(FIVE);
+    // sts_led_animateBlink();
+    // led_ctl_animateBlink(score);
+
+    /* 
+      rotation tests
+    */
+    // std_led_animateRotation(); // 71 milli seconds every second
+
+    /*
+      climb tests
+    */
+    // Serial.println(addr_led_animateClimb(THREE));
+    // delay(500);
+  //   led_ctl_cycleBlinkState();
+  //   led_ctl_celebrationSequence(FIVE);
+  // }
 }
 
 void loop() {
   // unsigned long startTime = millis();
-  Serial.print("Current state: ");
-  Serial.println(currentState);
+  // Serial.print("Current state: ");
+  // Serial.println(currentState);
   // Serial.print("Score: ");
   // Serial.println(score);
   // score = SIX;
@@ -68,9 +106,9 @@ void loop() {
       if (!playing) {
         mp3_playRandomSong(); // 8 milliseconds
       }
-      State state = sensor_checkPins(currentState); // check hall effects
-      // State state = sensor_test(currentState);
-      // checkForUpdate(state);
+      // State state = sensor_checkPins(currentState); // check hall effects
+      State state = sensor_test(currentState);
+      checkForUpdate(state);
       break;
     }
     case ONE:
@@ -80,8 +118,8 @@ void loop() {
     case FIVE: { // hall effects 1-5
       // addr_led_setState(currentState);
       // std_led_animateRotation(); 
-      State state =  sensor_checkPins(currentState); // check hall effects
-      // State state = sensor_test(currentState);
+      // State state =  sensor_checkPins(currentState); // check hall effects
+      State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
@@ -96,17 +134,22 @@ void loop() {
     case RESET: {
       if (score == SIX) {
         // boosh_longBurst();
-        // boosh_shortBursts();
-        boosh();
+        boosh_shortBursts();
+        // boosh();
       }
       mp3_playCelebration(score); // play sound effects
-      // led_ctl_animateBlink(score); // blink leds together
-      addr_led_animateBlink(score);
-      sts_led_animateBlink(score);
-
+      // std_led_setState(score);
+      // sts_led_animateBlink();
+      led_ctl_celebrationSequence(score);
+      
       resetWhenReady();
       break;
     }
+  }
+
+  // redundant safety feature in case signal drops
+  if (!boosh_isBooshing()) {
+    boosh_off();
   }
   // incrementState();
   // unsigned long totalLength = millis() - startTime;
@@ -121,8 +164,10 @@ void resetWhenReady() {
   unsigned long currentTime = millis();
   if (currentTime - lastStateUpdate >= resetTime) {
     boosh_reset(); // reset boosh
+    delay(100);
     addr_led_reset(); // reset addressable leds
     std_led_reset(); // reset standard leds
+    led_ctl_reset();
     mp3_reset(); // reset mp3
     score = READY; // reset score
     changeState(READY); // reset state
@@ -175,6 +220,6 @@ void incrementState() {
     else if (currentState == THREE) changeState(FOUR);
     else if (currentState == FOUR) changeState(FIVE);
     else if (currentState == FIVE) changeState(SIX);
-    else if (currentState == SIX) changeState(ONE);
+    else if (currentState == SIX) changeState(RESET);
   }
 }

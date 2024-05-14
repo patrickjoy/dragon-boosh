@@ -93,8 +93,8 @@ State sensor_checkPins(State state) {
 //   }
 // }
 
-/* TEST CODE
-const unsigned long testRate = 1000;
+
+const unsigned long testRate = 250;
 unsigned long lastTest = 0;
 State sensor_test(State state) {
   unsigned long currentTime = millis();
@@ -115,4 +115,3 @@ State sensor_test(State state) {
   }
   return state;
 }
-*/

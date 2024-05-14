@@ -7,10 +7,19 @@ const unsigned long boosh_pauseDuration = 333;
 unsigned long boosh_lastTurnedOn = 0;
 unsigned long boosh_lastTurnedOff = 0;
 
-bool boosh_booshed = false;
-
 int boosh_count = 0;
 int boosh_state = 0;
+
+bool boosh_isActive = false;
+bool boosh_booshed = false;
+
+void boosh_reset() {
+  digitalWrite(BOOSH_PIN, LOW);
+  boosh_count = 0;
+  boosh_state = 0;
+  boosh_isActive = false;
+  boosh_booshed = false;
+}
 
 void boosh_setup() {
   Serial.println("Setup boosh");
@@ -33,24 +42,29 @@ void boosh() {
 }
 
 void boosh_longBurst() {
-  bool booshBooshing = boosh_isBooshing(boosh_longDuration);
+  bool booshComplete = boosh_isComplete(boosh_longDuration);
   if (!boosh_booshed) {
     // if it's not booshed, trigger boosh
     Serial.println("big boosh");
     boosh_booshed = true;
     boosh_on();
-  } else if (boosh_booshed && !booshBooshing) { 
+  } else if (boosh_booshed && booshComplete) { 
     // turn boosh off when it's done booshing
     boosh_off();
   }
 }
 
 void boosh_shortBursts() {
-  bool booshBooshing = boosh_isBooshing(boosh_shortDuration);
+  Serial.println("short burst");
+
+  bool booshComplete = boosh_isComplete(boosh_shortDuration);
   bool booshPaused = boosh_isPaused();
 
+  Serial.print("Boosh complete: ");
+  Serial.println(booshComplete);
+
   // escape if boosh sequence is done
-  if (boosh_count >= 3 && !booshBooshing) {
+  if (boosh_count >= 3 && booshComplete) {
     boosh_off();
     return;
   }
@@ -60,18 +74,22 @@ void boosh_shortBursts() {
     boosh_booshed = true;
     boosh_count++;
     boosh_on();
-  } else if (boosh_booshed && !booshBooshing) { 
+  } else if (boosh_booshed && booshComplete) { 
     boosh_booshed = false;
     boosh_off();
   }
 }
 
-bool boosh_isBooshing(unsigned long booshDuration) {
+bool boosh_isComplete(unsigned long booshDuration) {
   unsigned long currentTime = millis();
-  if (currentTime - boosh_lastTurnedOn < booshDuration) {
+  if (currentTime - boosh_lastTurnedOn >= booshDuration) {
     return true;
   }
   return false;
+}
+
+bool boosh_isBooshing() {
+  return boosh_isActive;
 }
 
 bool boosh_isPaused() {
@@ -85,6 +103,7 @@ bool boosh_isPaused() {
 void boosh_on() {
   Serial.println("turn boosh on");
   boosh_lastTurnedOn = millis();
+  boosh_isActive = true;
   digitalWrite(BOOSH_PIN, HIGH);
 }
 
@@ -92,11 +111,5 @@ void boosh_off() {
   // Serial.println("turn boosh off");
   boosh_lastTurnedOff = millis();
   digitalWrite(BOOSH_PIN, LOW);
-}
-
-void boosh_reset() {
-  digitalWrite(BOOSH_PIN, LOW);
-  boosh_booshed = false;
-  boosh_count = 0;
-  boosh_state = 0;
+  boosh_isActive = false;
 }
