@@ -30,17 +30,17 @@ void boosh() {
 
   switch(boosh_state) {
     case 1: {
-      boosh_longBurst();
+      boosh_longBoosh();
       break;
     }
     case 2: {
-      boosh_shortBursts();
+      boosh_shortBoosh();
       break;
     }
   }
 }
 
-void boosh_longBurst() {
+void boosh_longBoosh() {
   bool booshBooshing = boosh_isBooshing(boosh_longDuration);
   if (!boosh_booshed) {
     // Serial.println("big boosh");
@@ -51,7 +51,7 @@ void boosh_longBurst() {
   }
 }
 
-void boosh_shortBursts() {
+void boosh_shortBoosh() {
   bool booshBooshing = boosh_isBooshing(boosh_shortDuration);
   bool booshPaused = boosh_isPaused();
 

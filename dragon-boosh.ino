@@ -89,8 +89,8 @@ void loop() {
     }
     case RESET: {
       if (score == SIX) {
-        // boosh_longBurst();
-        // boosh_shortBursts();
+        // boosh_longBoosh();
+        // boosh_shortBoosh();
         boosh();
       }
       mp3_playCelebration(score); // play sound effects
