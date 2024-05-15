@@ -1,6 +1,5 @@
 #define ADDR_LED_PIN 13
 
-// const int addr_led_numLeds = 100;
 const int addr_led_numLeds = 68;
 
 int addr_led_ranges[7] {
@@ -12,6 +11,8 @@ int addr_led_ranges[7] {
   57, // range 5 end
   68, // range 6 end
 };
+
+// const int addr_led_numLeds = 100;
 
 // int addr_led_ranges[7] {
 //   0,  // start
@@ -81,13 +82,6 @@ void addr_led_setup() {
   FastLED.addLeds<WS2812, ADDR_LED_PIN, BRG>(displayLeds, addr_led_numLeds);
   addr_led_setState(SIX, goalLeds);
   addr_led_setState(SIX, stagingLeds);
-
-  // testing
-  // addr_led_render();
-  // delay(200);
-  // while (true) {
-  //   addr_led_animateClimb(SIX);
-  // }
 }
 
 void addr_led_setState(State state) {

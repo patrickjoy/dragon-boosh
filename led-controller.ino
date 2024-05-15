@@ -1,9 +1,3 @@
-// enum CelebrationStates {
-//   CLIMB = 0,
-//   WAIT = 1,
-//   BLINK = 2,
-// };
-
 enum CelebrationStates {
   CLIMB = 0,
   WAIT = 1,

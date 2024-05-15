@@ -84,8 +84,6 @@ void mp3_playNextSong() {
 
 void mp3_playRandomSong() {
   int randomSong = random(1, mp3_lastSong + 1); // choose random song to play
-  // Serial.print("Play song: "); // TODO remove
-  // Serial.println(songNumber); // TODO remove
   mp3_playSong(randomSong);
 }
 

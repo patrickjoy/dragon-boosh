@@ -26,7 +26,6 @@ enum Response {
   UNRECOGNIZED = -2
 };
 
-// Rates
 const unsigned long stateTimeout = 500; // TODO (set to 500)
 const unsigned long resetTime = 28000; // TODO (songs are 28 seconds long)
 unsigned long lastStateUpdate = 0;
@@ -38,57 +37,16 @@ void setup() {
   Serial.begin(BAUD_RATE);
   Serial.println("Begin");
 
-  int pin_0 = analogRead(0);
-  randomSeed(pin_0 * 100); // set random seed
+  int randomPin = analogRead(A0);
+  randomSeed(randomPin * 100); // set random seed
 
   mp3_setup();
   sensor_setup();
   addr_led_setup();
-  // std_led_setup();
   new_led_setup();
   boosh_setup();
 
   mp3_playRandomSong(); // play first song
-
-  /* 
-    TODO remove testing
-  */
-  // delay(500);
-  // while(true) {
-    // score = SIX;
-
-    /*
-      test colors
-    */
-    // std_led_changeColor(0xFF22DD);
-
-    /* 
-      state tests
-    */
-    // addr_led_setState(THREE);
-    // std_led_setState(score);
- 
-
-    /*
-      blink tests
-    */
-    // addr_led_animateBlink(FIVE);
-    // sts_led_animateBlink();
-    // led_ctl_animateBlink(score);
-
-    /* 
-      rotation tests
-    */
-    // std_led_animateRotation(); // 71 milli seconds every second
-
-    /*
-      climb tests
-    */
-    // Serial.println(addr_led_animateClimb(THREE));
-    // delay(500);
-  //   led_ctl_cycleBlinkState();
-  //   led_ctl_celebrationSequence(FIVE);
-  // }
 }
 
 void loop() {
@@ -102,7 +60,6 @@ void loop() {
   switch (currentState) {
     case READY: { // loop
       // addr_led_animateSnake(); // 4 milliseconds
-      // std_led_animateRotation(); // 71 milli seconds every second
       bool playing = mp3_checkPlaying(); // check music status
       if (!playing) {
         mp3_playRandomSong(); // 8 milliseconds
@@ -118,16 +75,14 @@ void loop() {
     case FOUR:
     case FIVE: { // hall effects 1-5
       // addr_led_setState(currentState);
-      // std_led_animateRotation(); 
+      // new_led_setState(currentState);
       State state = sensor_checkPins(currentState); // check hall effects
       // State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
     case SIX: { // hall effect 6
-      // Serial.println("boosh");
       score = currentState;
-      // std_led_animateRotation(); 
       // addr_led_setState(currentState); // light up addressable leds based on state
       changeState(RESET);
       break;
@@ -139,8 +94,6 @@ void loop() {
         boosh();
       }
       mp3_playCelebration(score); // play sound effects
-      // std_led_setState(score);
-      // sts_led_animateBlink();
       new_led_setState(score);
       led_ctl_celebrationSequence(score);
       
@@ -165,7 +118,6 @@ void resetWhenReady() {
     led_ctl_reset();
     new_led_reset();
     addr_led_reset(); // reset addressable leds
-    // std_led_reset(); // reset standard leds
     mp3_reset(); // reset mp3
     score = READY; // reset score
     changeState(READY); // reset state
@@ -196,7 +148,6 @@ void checkForUpdate(State state) {
 void checkTimeout(State state) {
   unsigned long currentTime = millis();
   if ((currentTime - lastStateUpdate >= stateTimeout) && (state != READY)) {
-    // Serial.println("Timedout");
     changeState(RESET);
   }
 }

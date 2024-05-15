@@ -29,27 +29,6 @@ void sensor_setup() {
   }
 }
 
-// OLD CODE - ONLY CHECKS PINS ABOVE CURRENT PIN
-// State sensor_checkPins(State state) {
-//   int pinIndex = 0;
-//   if (state != READY) pinIndex = state - 1; // READY would otherwise be -1 and crash the program.
-
-//   // check all states above current state
-//   for (int i = sensor_count - 1; i >= pinIndex; i--) {
-//     // Serial.print("check pin: ");
-//     // Serial.println(i);
-//     int pin = sensorPins[i];
-//     int value = analogRead(pin);
-//     // Serial.println(value); // TODO remove
-//     if (value < SENSOR_THRESHOLD) {
-//       // Serial.print("Magnet detected on pin: "); // TODO remove
-//       // Serial.println(i);
-//       return static_cast<State>(i + 1);
-//     }
-//   }
-//   return state;
-// }
-
 State sensor_checkPins(State state) {
   // printTest();
   int pinIndex = 0;
@@ -71,28 +50,6 @@ State sensor_checkPins(State state) {
   }
   return state;
 }
-
-// void printTest() {
-//   unsigned long currentTime = millis();
-//   unsigned long totalTime = currentTime - startTime;
-//   // Serial.print("Total time: ");
-//   // Serial.println(totalTime);
-//   if (totalTime >= resetRate) {
-//     // Serial.print("Current Time: ");
-//     // Serial.println(currentTime);
-//     // Serial.print("Start time: ");
-//     // Serial.println(startTime);
-//     for (int i = 0; i < sensor_count; i++) {
-//       Serial.print("pin ");
-//       Serial.print(i);
-//       Serial.print(" count: ");
-//       Serial.println(results[i]);
-//       results[i] = 0;
-//     }
-//     startTime = millis();
-//   }
-// }
-
 
 const unsigned long testRate = 250;
 unsigned long lastTest = 0;
