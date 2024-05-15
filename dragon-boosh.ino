@@ -107,8 +107,8 @@ void loop() {
       if (!playing) {
         mp3_playRandomSong(); // 8 milliseconds
       }
-      // State state = sensor_checkPins(currentState); // check hall effects
-      State state = sensor_test(currentState);
+      State state = sensor_checkPins(currentState); // check hall effects
+      // State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
@@ -119,8 +119,8 @@ void loop() {
     case FIVE: { // hall effects 1-5
       // addr_led_setState(currentState);
       // std_led_animateRotation(); 
-      // State state =  sensor_checkPins(currentState); // check hall effects
-      State state = sensor_test(currentState);
+      State state = sensor_checkPins(currentState); // check hall effects
+      // State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }

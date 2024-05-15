@@ -43,24 +43,17 @@ void boosh() {
 void boosh_longBurst() {
   bool booshBooshing = boosh_isBooshing(boosh_longDuration);
   if (!boosh_booshed) {
-    // if it's not booshed, trigger boosh
-    Serial.println("big boosh");
+    // Serial.println("big boosh");
     boosh_booshed = true;
     boosh_on();
   } else if (boosh_booshed && !booshBooshing) { 
-    // turn boosh off when it's done booshing
     boosh_off();
   }
 }
 
 void boosh_shortBursts() {
-  Serial.println("short burst");
-
   bool booshBooshing = boosh_isBooshing(boosh_shortDuration);
   bool booshPaused = boosh_isPaused();
-
-  Serial.print("Boosh complete: ");
-  Serial.println(booshBooshing);
 
   // escape if boosh sequence is done
   if (boosh_count >= 3 && !booshBooshing) {
@@ -69,7 +62,7 @@ void boosh_shortBursts() {
   }
 
   if (!boosh_booshed && !booshPaused) {
-    Serial.println("small boosh");
+    // Serial.println("small boosh");
     boosh_booshed = true;
     boosh_count++;
     boosh_on();
