@@ -1,5 +1,5 @@
-#define MP3_RX_PIN 7  // White
-#define MP3_TX_PIN 6  // Green
+#define MP3_RX_PIN 8  // White
+#define MP3_TX_PIN 9  // Green
 
 #define MP3_SEL_DEV  0x09
 #define MP3_TF       0x02

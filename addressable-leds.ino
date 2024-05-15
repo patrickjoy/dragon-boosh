@@ -1,14 +1,27 @@
 #define ADDR_LED_PIN 13
 
+// const int addr_led_numLeds = 100;
+const int addr_led_numLeds = 68;
+
 int addr_led_ranges[7] {
-  0,  // start
-  16, // range 1
-  32, // range 2
-  48, // range 3
-  64, // range 4
-  80, // range 5
-  100, // range 6
+  0,   // start
+  12,  // range 1 end
+  26,  // range 2 end
+  38,  // range 3 end
+  48,  // range 4 end
+  57, // range 5 end
+  68, // range 6 end
 };
+
+// int addr_led_ranges[7] {
+//   0,  // start
+//   16, // range 1
+//   32, // range 2
+//   48, // range 3
+//   64, // range 4
+//   80, // range 5
+//   100, // range 6
+// };
 
 CRGB addr_led_colors[7] = {
   CRGB::Black, // Off
@@ -30,12 +43,11 @@ enum addr_led_state {
   ADDR_LED_SIX = 6
 };
 
-const int addr_led_numLeds = 100;
 const unsigned long addr_led_refreshRate = 10;
 const unsigned long addr_led_blinkRate = 300;
 const unsigned long addr_led_snakeRate = 20;
-const unsigned long addr_led_climbRate = 40;
-const unsigned long addr_led_climbPause = 2000;
+const unsigned long addr_led_climbRate = 50;
+const unsigned long addr_led_climbPause = 1000;
 
 unsigned long addr_led_lastRenderTime = 0;
 
@@ -131,6 +143,27 @@ int addr_led_animateClimb(State state) {
 /*
  TODO make pause at top longer
 */
+// int addr_led_animateClimb(State state, unsigned long pause) {
+//   int limit = addr_led_ranges[state];
+//   unsigned long currentTime = millis();
+//   if (currentTime - addr_led_lastRenderTime >= addr_led_climbRate) {
+//     if (!addr_led_climbStarted) {
+//       addr_led_setRange(0, addr_led_numLeds, addr_led_colors[0]);
+//       addr_led_render();
+//       addr_led_climbStarted = true;
+//     } else if (addr_led_nextLedToRender < limit) {
+//       addr_led_setColor(addr_led_nextLedToRender, goalLeds[addr_led_nextLedToRender]);
+//       addr_led_nextLedToRender++;
+//       addr_led_render();
+//     } else if (currentTime - addr_led_lastRenderTime >= pause){
+//       addr_led_numClimbs++;
+//       addr_led_nextLedToRender = 0;
+//       addr_led_climbStarted = false;
+//     }
+//   }
+//   return addr_led_numClimbs;
+// }
+
 int addr_led_animateClimb(State state, unsigned long pause) {
   int limit = addr_led_ranges[state];
   unsigned long currentTime = millis();
@@ -140,8 +173,11 @@ int addr_led_animateClimb(State state, unsigned long pause) {
       addr_led_render();
       addr_led_climbStarted = true;
     } else if (addr_led_nextLedToRender < limit) {
-      addr_led_setColor(addr_led_nextLedToRender, goalLeds[addr_led_nextLedToRender]);
-      addr_led_nextLedToRender++;
+      // update two leds at a time
+      for (int i = 0; i < 3; i++) {
+        addr_led_setColor(addr_led_nextLedToRender, goalLeds[addr_led_nextLedToRender]);
+        addr_led_nextLedToRender++;
+      }
       addr_led_render();
     } else if (currentTime - addr_led_lastRenderTime >= pause){
       addr_led_numClimbs++;

@@ -129,7 +129,6 @@ void std_led_setState(State state) {
     return;
   }
 
-  Serial.println("HERE");
   std_led_changeColor(std_led_colors[state]);
   std_led_currentState = state;
 }

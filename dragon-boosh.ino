@@ -28,7 +28,7 @@ enum Response {
 
 // Rates
 const unsigned long stateTimeout = 500; // TODO (set to 500)
-const unsigned long resetTime = 10000; // TODO (songs are 28 seconds long)
+const unsigned long resetTime = 28000; // TODO (songs are 28 seconds long)
 unsigned long lastStateUpdate = 0;
 
 State currentState = READY;
@@ -44,7 +44,8 @@ void setup() {
   mp3_setup();
   sensor_setup();
   addr_led_setup();
-  std_led_setup();
+  // std_led_setup();
+  new_led_setup();
   boosh_setup();
 
   mp3_playRandomSong(); // play first song
@@ -134,22 +135,18 @@ void loop() {
     case RESET: {
       if (score == SIX) {
         // boosh_longBurst();
-        boosh_shortBursts();
-        // boosh();
+        // boosh_shortBursts();
+        boosh();
       }
       mp3_playCelebration(score); // play sound effects
       // std_led_setState(score);
       // sts_led_animateBlink();
+      new_led_setState(score);
       led_ctl_celebrationSequence(score);
       
       resetWhenReady();
       break;
     }
-  }
-
-  // redundant safety feature in case signal drops
-  if (!boosh_isBooshing()) {
-    boosh_off();
   }
   // incrementState();
   // unsigned long totalLength = millis() - startTime;
@@ -164,10 +161,11 @@ void resetWhenReady() {
   unsigned long currentTime = millis();
   if (currentTime - lastStateUpdate >= resetTime) {
     boosh_reset(); // reset boosh
-    delay(100);
-    addr_led_reset(); // reset addressable leds
-    std_led_reset(); // reset standard leds
+    // delay(100);
     led_ctl_reset();
+    new_led_reset();
+    addr_led_reset(); // reset addressable leds
+    // std_led_reset(); // reset standard leds
     mp3_reset(); // reset mp3
     score = READY; // reset score
     changeState(READY); // reset state

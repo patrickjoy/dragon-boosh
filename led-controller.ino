@@ -11,8 +11,7 @@ enum CelebrationStates {
   BLINK_OFF = 3,
 };
 
-const unsigned long led_ctl_blinkRate = 300; // TODO set to 300
-const unsigned long led_ctl_climbRate = 10;
+const unsigned long led_ctl_blinkRate = 150; // TODO set to 300
 unsigned long led_ctl_lastBlinkTime = 0;
 
 CelebrationStates led_ctl_currentState = CLIMB;
