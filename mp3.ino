@@ -8,7 +8,7 @@
 #define MP3_PLAY_X_INDEX      0x03 // Play X file (1-255)
 #define MP3_SET_VOLUME        0x06 // 0 - 30
 
-unsigned long mp3_songLengths[33] = {
+unsigned long mp3_songLengths[32] = {
   253000, // Song 1 // 240 + 13
   322000, // Song 2 // 300 + 22
   252000, // Song 3 // 240 + 12
@@ -27,27 +27,26 @@ unsigned long mp3_songLengths[33] = {
   168000, // Song 16 // 120 + 48
   152000, // Song 17 // 120 + 32
   324000, // Song 18 // 300 + 24
-  412000, // Song 19 // 360 + 52
-  408000, // Song 20 // 360 + 48
-  115000, // Song 21 // 60 + 55
-  345000, // Song 22 // 300 + 45
-  28000, // Song 23 rat
-  28000, // Song 24 rooster
-  28000, // Song 25 horse
-  28000, // Song 26 ox
-  28000, // Song 27 tiger
-  28000, // Song 28 dragon
-  1000, // Song 29 one
-  1000, // Song 30 two
-  1000, // Song 31 three
-  1000, // Song 32 four
-  1000, // Song 33 five
+  408000, // Song 19 // 360 + 48
+  115000, // Song 20 // 60 + 55
+  345000, // Song 21 // 300 + 45
+  28000, // Song 22 rat
+  28000, // Song 23 rooster
+  28000, // Song 24 horse
+  28000, // Song 25 ox
+  28000, // Song 26 tiger
+  28000, // Song 27 dragon
+  1000, // Song 28 one
+  1000, // Song 29 two
+  1000, // Song 30 three
+  1000, // Song 31 four
+  1000, // Song 32 five
 };
 
-unsigned long mp3_songStartedTime;
+const int mp3_lastSong = 21;
 
-const int mp3_lastSong = 22;
-const int mp3_numSounds = 33;
+unsigned long mp3_songStartedTime = 0;
+
 int mp3_currentSong = 1; // index starts at 1
 
 bool mp3_celebrationPlayed = false;
@@ -74,7 +73,6 @@ void mp3_setVolume(int volume) {
 }
 
 void mp3_playNextSong() {
-  Serial.println("Play next song");
   if (mp3_currentSong >= mp3_lastSong) {
     mp3_playSong(1);
   } else {
@@ -135,4 +133,16 @@ void mp3_sendCommand(int8_t command, int8_t dat1, int8_t dat2) {
   for (uint8_t i = 0; i < 8; i++) {
     mp3.write(frame[i]);
   }
+}
+
+void mp3_testSongs() {
+  Serial.println("Test songs");
+  mp3_playSong(18);
+
+  while (true) {
+    delay(15000);
+    mp3_playNextSong();
+  }
+
+  Serial.println("Done testing songs");
 }
