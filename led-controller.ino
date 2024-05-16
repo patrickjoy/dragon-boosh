@@ -29,75 +29,6 @@ void led_ctl_reset() {
   led_ctl_skippedBlinkOn = false;
 }
 
-// void led_ctl_animateBlink(State score) {
-//   unsigned long currentTime = millis();
-//   if (currentTime - led_ctl_lastRenderTime >= led_ctl_blinkRate) {
-//   if (!led_ctl_blinkOn) {
-//       Serial.println("Turn leds on");
-
-//       // addr_led_setState(score);
-//       std_led_turn_on();
-//       // Cannot turn on and change state at the same time
-//       // std_led_setState(score);
-//       led_ctl_blinkOn = true;
-//     } else {
-//       Serial.println("Turn leds off");
-//       // addr_led_turn_off();
-//       std_led_turn_off();
-//       led_ctl_blinkOn = false;
-//     }
-//     led_ctl_lastRenderTime = millis();
-//   }
-// } 
-
-/*
- coordinated blink
-*/
-// void led_ctl_celebrationSequence(State score) {
-//   switch (led_ctl_celebrationState) {
-//     case CLIMB: {
-//       if (led_ctl_climbTimes >= 1) {
-//         led_ctl_climbTimes = 0;
-//         addr_led_reset_climbCount();
-//         led_ctl_celebrationState = BLINK;
-//       } else {
-//         int climbCount = addr_led_animateClimb(score, 0);
-//         if (climbCount != led_ctl_climbTimes) {
-//           led_ctl_climbTimes = climbCount;
-//         }
-//       }
-//       break;
-//     }
-//     case BLINK: {
-//       if(led_ctl_blinkTimes >= 5) {
-//         led_ctl_blinkTimes = 0;
-//         led_ctl_celebrationState = CLIMB;
-//         led_ctl_skippedBlinkOn = false;
-//         led_ctl_skippedBlinkOff = false;
-//       } else {
-//         if (led_ctl_blinked != led_ctl_blinkOn) {
-//           Serial.print("blinkOn: ");
-//           Serial.println(led_ctl_blinkOn);
-//           if (led_ctl_blinkTimes == 0 && !led_ctl_skippedBlinkOn) {
-//             Serial.println("skip on");
-//             if (led_ctl_blinkOn) led_ctl_skippedBlinkOn = true;
-//           } else if (led_ctl_blinkTimes == 0 && led_ctl_skippedBlinkOn && !led_ctl_skippedBlinkOff) {
-//             Serial.println("skip off");
-//             if (!led_ctl_blinkOn) led_ctl_skippedBlinkOff = true;
-//           } else {
-//             if (led_ctl_blinkOn) led_ctl_blinkTimes++;
-//             addr_led_blink(led_ctl_blinkOn, score);
-//             Serial.print("blinkTimes: ");
-//             Serial.println(led_ctl_blinkTimes);
-//           }
-//           led_ctl_blinked = led_ctl_blinkOn;
-//         }
-//       }
-//       break;
-//     }
-//   }
-// }
-
 void led_ctl_celebrationSequence(State score) {
   switch (led_ctl_currentState) {
     case CLIMB: {
@@ -162,11 +93,3 @@ void led_ctl_celebrationSequence(State score) {
     }
   }
 }
-
-// void led_ctl_cycleBlinkState() {
-//   unsigned long currentTime = millis();
-//   if (currentTime - led_ctl_lastBlinkTime >= led_ctl_blinkRate) {
-//     led_ctl_blinkOn = !led_ctl_blinkOn;
-//     led_ctl_lastBlinkTime = millis();
-//   }
-// } 

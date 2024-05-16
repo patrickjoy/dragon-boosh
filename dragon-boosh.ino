@@ -46,7 +46,7 @@ void setup() {
   new_led_setup();
   boosh_setup();
 
-  mp3_playRandomSong(); // play first song
+  mp3_playRandomSong();
 }
 
 void loop() {
@@ -59,13 +59,12 @@ void loop() {
   // currentState = RESET;
   switch (currentState) {
     case READY: { // loop
-      // addr_led_animateSnake(); // 4 milliseconds
       bool playing = mp3_checkPlaying(); // check music status
       if (!playing) {
         mp3_playRandomSong(); // 8 milliseconds
       }
-      State state = sensor_checkPins(currentState); // check hall effects
-      // State state = sensor_test(currentState);
+      // State state = sensor_checkPins(currentState); // check hall effects
+      State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
@@ -74,16 +73,13 @@ void loop() {
     case THREE:
     case FOUR:
     case FIVE: { // hall effects 1-5
-      // addr_led_setState(currentState);
-      // new_led_setState(currentState);
-      State state = sensor_checkPins(currentState); // check hall effects
-      // State state = sensor_test(currentState);
+      // State state = sensor_checkPins(currentState); // check hall effects
+      State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
     case SIX: { // hall effect 6
       score = currentState;
-      // addr_led_setState(currentState); // light up addressable leds based on state
       changeState(RESET);
       break;
     }
@@ -124,16 +120,6 @@ void resetWhenReady() {
   }
 }
 
-// OLD CODE - EXPECTS STATE TO ONLY INCREAE
-// void checkForUpdate(State state) {
-//   if (state != currentState) {
-//     score = state;
-//     changeState(state);
-//   } else if (checkTimeout(state)) {
-//     changeState(RESET);
-//   }
-// }
-
 void checkForUpdate(State state) {
   if (state == currentState) {
     checkTimeout(state);
@@ -153,8 +139,6 @@ void checkTimeout(State state) {
 }
 
 void changeState(State state) {
-  // Serial.print("Changing to state: ");
-  // Serial.println(state);
   currentState = state;
   lastStateUpdate = millis();
 }

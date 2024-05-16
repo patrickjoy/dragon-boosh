@@ -10,41 +10,24 @@ const int sensorPins[sensor_count] {
   A5
 };
 
-// unsigned long resetRate = 5000;
-// unsigned long startTime = 0;
-// int results[sensor_count] {
-//   0,
-//   0,
-//   0,
-//   0,
-//   0,
-//   0
-// };
-
-// measure last pin
 void sensor_setup() {
   Serial.println("Setup hall effect sensors");
   for (int pin : sensorPins) {
-    pinMode(pin, INPUT); // setup pins
+    pinMode(pin, INPUT);
   }
 }
 
 State sensor_checkPins(State state) {
-  // printTest();
-  int pinIndex = 0;
-  if (state != READY) pinIndex = state - 1; // READY would otherwise be -1 and crash the program.
-
-  // check all pins
   for (int i = sensor_count - 1; i >= 0; i--) {
-    // Serial.print("check pin: ");
-    // Serial.println(i);
     int pin = sensorPins[i];
     int value = analogRead(pin);
-    // Serial.println(value); // TODO remove
+    // Serial.print("Pin ");
+    // Serial.println(i);
+    // Serial.println(": ");
+    // Serial.println(value);
     if (value < SENSOR_THRESHOLD) {
-      // Serial.print("Magnet detected on pin: "); // TODO remove
+      // Serial.print("Magnet detected on pin: ");
       // Serial.println(i);
-      // results[i]++;
       return static_cast<State>(i + 1);
     }
   }
@@ -62,7 +45,7 @@ State sensor_test(State state) {
     // Serial.println(value);
 
     if (value < SENSOR_THRESHOLD) {
-      Serial.println("Magnet detected"); // TODO remove
+      Serial.println("Magnet detected");
       State tmpState = static_cast<State>(state + 1);
       Serial.print("Sent to state: ");
       Serial.println(tmpState);

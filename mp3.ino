@@ -1,5 +1,5 @@
-#define MP3_RX_PIN 8  // White
-#define MP3_TX_PIN 9  // Green
+#define MP3_RX_PIN 8
+#define MP3_TX_PIN 9
 
 #define MP3_SEL_DEV  0x09
 #define MP3_TF       0x02
@@ -61,12 +61,12 @@ void mp3_reset() {
 
 void mp3_setup() {
   Serial.println("Setup mp3 player");
-  mp3.begin(BAUD_RATE); // being mp3 player
-  delay(500); // delay to send command
+  mp3.begin(BAUD_RATE);
+  delay(500);
   mp3_sendCommand(MP3_SEL_DEV, MP3_TF); // select the TF card
-  delay(500); // delay to send command
+  delay(500);
   mp3_setVolume(30);
-  delay(500); // delay to send command
+  delay(500);
 }
 
 void mp3_setVolume(int volume) {
@@ -83,7 +83,7 @@ void mp3_playNextSong() {
 }
 
 void mp3_playRandomSong() {
-  int randomSong = random(1, mp3_lastSong + 1); // choose random song to play
+  int randomSong = random(1, mp3_lastSong + 1);
   mp3_playSong(randomSong);
 }
 
@@ -100,7 +100,7 @@ void mp3_playCelebration(State state) {
   else if (state == THREE) mp3_playSong(25);
   else if (state == FOUR) mp3_playSong(26);
   else if (state == FIVE) mp3_playSong(27);
-  else if (state == SIX) mp3_playSong(28); // There's only five songs
+  else if (state == SIX) mp3_playSong(28);
   mp3_celebrationPlayed = true;
 }
 

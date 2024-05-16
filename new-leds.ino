@@ -2,19 +2,6 @@
 #define GREEN_PIN 5
 #define BLUE_PIN 6
 
-// #define RED_PIN A0
-// #define GREEN_PIN A1
-// #define BLUE_PIN A2
-
-// Red (255, 0 , 0)
-// Blue (0, 0, 255)
-// Yellow (255,255,0)
-// Purple (128, 0, 128)
-// Green (0, 128, 0)
-// RedOrange (255, 69, 0)
-// White (255, 255, 255)
-// Black (0, 0, 0)
-
 void new_led_reset() {
     new_led_setState(READY);
 }

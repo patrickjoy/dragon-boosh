@@ -12,18 +12,6 @@ int addr_led_ranges[7] {
   68, // range 6 end
 };
 
-// const int addr_led_numLeds = 100;
-
-// int addr_led_ranges[7] {
-//   0,  // start
-//   16, // range 1
-//   32, // range 2
-//   48, // range 3
-//   64, // range 4
-//   80, // range 5
-//   100, // range 6
-// };
-
 CRGB addr_led_colors[7] = {
   CRGB::Black, // Off
   CRGB::Blue, // Rat
@@ -105,17 +93,6 @@ void addr_led_setState(State state, CRGB leds[]) {
   }  
 }
 
-// void addr_led_setState(State state, CRGB leds[]) {
-//   unsigned long currentTime = millis();
-//   addr_led_setRange(0, addr_led_numLeds, addr_led_colors[0], leds);
-//   if (state >= 1) addr_led_setRange(addr_led_ranges[0], addr_led_ranges[1], addr_led_colors[1], leds);
-//   if (state >= 2) addr_led_setRange(addr_led_ranges[1], addr_led_ranges[2], addr_led_colors[2], leds);
-//   if (state >= 3) addr_led_setRange(addr_led_ranges[2], addr_led_ranges[3], addr_led_colors[3], leds);
-//   if (state >= 4) addr_led_setRange(addr_led_ranges[3], addr_led_ranges[4], addr_led_colors[4], leds);
-//   if (state >= 5) addr_led_setRange(addr_led_ranges[4], addr_led_ranges[5], addr_led_colors[5], leds);
-//   if (state == 6) addr_led_setRange(addr_led_ranges[5], addr_led_ranges[6], addr_led_colors[6], leds);
-// }
-
 void addr_led_animateSnake() {
   unsigned long currentTime = millis();
   if (currentTime - addr_led_lastRenderTime >= addr_led_snakeRate) {
@@ -133,30 +110,6 @@ void addr_led_animateSnake() {
 int addr_led_animateClimb(State state) {
   return addr_led_animateClimb(state, addr_led_climbPause);
 }
-
-/*
- TODO make pause at top longer
-*/
-// int addr_led_animateClimb(State state, unsigned long pause) {
-//   int limit = addr_led_ranges[state];
-//   unsigned long currentTime = millis();
-//   if (currentTime - addr_led_lastRenderTime >= addr_led_climbRate) {
-//     if (!addr_led_climbStarted) {
-//       addr_led_setRange(0, addr_led_numLeds, addr_led_colors[0]);
-//       addr_led_render();
-//       addr_led_climbStarted = true;
-//     } else if (addr_led_nextLedToRender < limit) {
-//       addr_led_setColor(addr_led_nextLedToRender, goalLeds[addr_led_nextLedToRender]);
-//       addr_led_nextLedToRender++;
-//       addr_led_render();
-//     } else if (currentTime - addr_led_lastRenderTime >= pause){
-//       addr_led_numClimbs++;
-//       addr_led_nextLedToRender = 0;
-//       addr_led_climbStarted = false;
-//     }
-//   }
-//   return addr_led_numClimbs;
-// }
 
 int addr_led_animateClimb(State state, unsigned long pause) {
   int limit = addr_led_ranges[state];
@@ -182,43 +135,7 @@ int addr_led_animateClimb(State state, unsigned long pause) {
   return addr_led_numClimbs;
 }
 
-// int addr_led_animateClimb(State state) {
-//   int limit = addr_led_ranges[state];
-//   unsigned long currentTime = millis();
-//   if (currentTime - addr_led_lastRenderTime >= addr_led_climbRate) {
-//     if (addr_led_nextLedToRender >= limit) {
-//       addr_led_numClimbs++;
-//       addr_led_nextLedToRender = 0;
-//       addr_led_setRange(0, addr_led_numLeds, addr_led_colors[0]);
-//       addr_led_render();
-//     } else {
-//       addr_led_setColor(addr_led_nextLedToRender, goalLeds[addr_led_nextLedToRender]);
-//       addr_led_nextLedToRender++;
-//       addr_led_render();
-//     }
-//   }
-//   return addr_led_numClimbs;
-// }
-
-// void addr_led_animateBlink(State score) {
-//   unsigned long currentTime = millis();
-//   if (currentTime - addr_led_lastRenderTime >= addr_led_blinkRate) {
-//     if (!addr_led_on) {
-//       // Serial.println("leds on");
-//       addr_led_setState(score);
-//       addr_led_on = true;
-//     } else {
-//       // Serial.println("leds off");
-//       addr_led_setRange(0, addr_led_numLeds, addr_led_colors[0]);
-//       addr_led_on = false;
-//     }
-//     addr_led_render();
-//   }
-// }
-
 void addr_led_blink(bool on, State score) {
-  // Serial.print("Blink: ");
-  // Serial.println(on);
   if(on) {
     addr_led_turn_off();
   } else {
