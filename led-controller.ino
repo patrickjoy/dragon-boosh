@@ -5,7 +5,7 @@ enum CelebrationStates {
   BLINK_OFF = 3,
 };
 
-const unsigned long led_ctl_blinkRate = 150; // TODO set to 300
+const unsigned long led_ctl_blinkRate = 150;
 unsigned long led_ctl_lastBlinkTime = 0;
 
 CelebrationStates led_ctl_currentState = CLIMB;
@@ -14,19 +14,10 @@ CelebrationStates led_ctl_nextState = WAIT;
 int led_ctl_climbTimes = 0;
 int led_ctl_blinkTimes = 0;
 
-bool led_ctl_blinkOn = true;
-bool led_ctl_blinked = false;
-bool led_ctl_skippedBlinkOff = false;
-bool led_ctl_skippedBlinkOn = false;
-
 void led_ctl_reset() {
   led_ctl_currentState = CLIMB;
   led_ctl_climbTimes = 0;
   led_ctl_blinkTimes = 0;
-  led_ctl_blinkOn = true;
-  led_ctl_blinked = false;
-  led_ctl_skippedBlinkOff = false;
-  led_ctl_skippedBlinkOn = false;
 }
 
 void led_ctl_celebrationSequence(State score) {

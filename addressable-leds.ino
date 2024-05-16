@@ -22,41 +22,26 @@ CRGB addr_led_colors[7] = {
   CRGB::White, // Dragon
 };
 
-enum addr_led_state {
-  ADDR_LED_READY = 0,
-  ADDR_LED_ONE = 1,
-  ADDR_LED_TWO = 2,
-  ADDR_LED_THREE = 3,
-  ADDR_LED_FOUR = 4,
-  ADDR_LED_FIVE = 5,
-  ADDR_LED_SIX = 6
-};
-
 const unsigned long addr_led_refreshRate = 10;
-const unsigned long addr_led_blinkRate = 300;
 const unsigned long addr_led_snakeRate = 20;
 const unsigned long addr_led_climbRate = 50;
 const unsigned long addr_led_climbPause = 1000;
 
 unsigned long addr_led_lastRenderTime = 0;
 
-bool addr_led_on = true;
 bool addr_led_climbStarted = false;
 
 int addr_led_nextLedToRender = 0;
 int addr_led_numClimbs = 0;
-int addr_led_numBlinks = 0;
 
 CRGB displayLeds[addr_led_numLeds];
 CRGB stagingLeds[addr_led_numLeds];
 CRGB goalLeds[addr_led_numLeds];
 
 void addr_led_reset() {
-  addr_led_on = true;
   addr_led_climbStarted = false;
   addr_led_nextLedToRender = 0;
   addr_led_numClimbs = 0;
-  addr_led_numBlinks = 0;
   addr_led_setState(SIX, goalLeds);
   addr_led_setState(SIX, stagingLeds);
 }

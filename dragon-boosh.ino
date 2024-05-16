@@ -26,8 +26,8 @@ enum Response {
   UNRECOGNIZED = -2
 };
 
-const unsigned long stateTimeout = 500; // TODO (set to 500)
-const unsigned long resetTime = 28000; // TODO (songs are 28 seconds long)
+const unsigned long stateTimeout = 500;
+const unsigned long resetTime = 28000; // (celebration songs are 28 seconds long)
 unsigned long lastStateUpdate = 0;
 
 State currentState = READY;
@@ -63,7 +63,7 @@ void loop() {
       if (!playing) {
         mp3_playRandomSong(); // 8 milliseconds
       }
-      // State state = sensor_checkPins(currentState); // check hall effects
+      // State state = sensor_checkPins(currentState);
       State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
@@ -73,7 +73,7 @@ void loop() {
     case THREE:
     case FOUR:
     case FIVE: { // hall effects 1-5
-      // State state = sensor_checkPins(currentState); // check hall effects
+      // State state = sensor_checkPins(currentState);
       State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
@@ -89,7 +89,7 @@ void loop() {
         // boosh_shortBoosh();
         boosh();
       }
-      mp3_playCelebration(score); // play sound effects
+      mp3_playCelebration(score);
       new_led_setState(score);
       led_ctl_celebrationSequence(score);
       
@@ -99,24 +99,21 @@ void loop() {
   }
   // incrementState();
   // unsigned long totalLength = millis() - startTime;
-  // if (totalLength > 5) {
-    // Serial.print("Loop time: ");
-    // Serial.println(totalLength);
-    // Serial.println(startTime);
-  // }
+  // Serial.print("Loop time: ");
+  // Serial.println(totalLength);
+  // Serial.println(startTime);
 }
 
 void resetWhenReady() {
   unsigned long currentTime = millis();
   if (currentTime - lastStateUpdate >= resetTime) {
-    boosh_reset(); // reset boosh
-    // delay(100);
+    boosh_reset();
     led_ctl_reset();
     new_led_reset();
-    addr_led_reset(); // reset addressable leds
-    mp3_reset(); // reset mp3
-    score = READY; // reset score
-    changeState(READY); // reset state
+    addr_led_reset();
+    mp3_reset();
+    score = READY;
+    changeState(READY);
   }
 }
 
