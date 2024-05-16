@@ -45,10 +45,10 @@ State sensor_test(State state) {
     // Serial.println(value);
 
     if (value < SENSOR_THRESHOLD) {
-      Serial.println("Magnet detected");
+      // Serial.println("Magnet detected");
       State tmpState = static_cast<State>(state + 1);
-      Serial.print("Sent to state: ");
-      Serial.println(tmpState);
+      // Serial.print("Sent to state: ");
+      // Serial.println(tmpState);
       lastTest = millis();
       return tmpState;
     }

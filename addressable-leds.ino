@@ -72,7 +72,6 @@ void addr_led_setState(State state, CRGB leds[]) {
     if (state >= 5) addr_led_setRange(addr_led_ranges[4], addr_led_ranges[5], addr_led_colors[5], leds);
     if (state == 6) addr_led_setRange(addr_led_ranges[5], addr_led_ranges[6], addr_led_colors[6], leds);
     if (leds == stagingLeds) {
-      // Serial.println("StagingLeds");
       addr_led_render();
     }
   }  
@@ -107,6 +106,7 @@ int addr_led_animateClimb(State state, unsigned long pause) {
     } else if (addr_led_nextLedToRender < limit) {
       // update two leds at a time
       for (int i = 0; i < 3; i++) {
+        if (addr_led_nextLedToRender >= limit) break;
         addr_led_setColor(addr_led_nextLedToRender, goalLeds[addr_led_nextLedToRender]);
         addr_led_nextLedToRender++;
       }
