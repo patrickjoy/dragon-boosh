@@ -1,7 +1,7 @@
 #define ADDR_LED_PIN 13
 
 
-const int start_led = 6;
+const int start_led = 6; // (6th copper connector)
 const int addr_led_numLeds = 68 + start_led + 3;
 
 int addr_led_ranges[7] {
