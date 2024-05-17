@@ -1,15 +1,17 @@
 #define ADDR_LED_PIN 13
 
-const int addr_led_numLeds = 68;
+
+const int start_led = 6;
+const int addr_led_numLeds = 68 + start_led + 3;
 
 int addr_led_ranges[7] {
-  0,   // start
-  12,  // range 1 end
-  26,  // range 2 end
-  38,  // range 3 end
-  48,  // range 4 end
-  57, // range 5 end
-  68, // range 6 end
+  0 + start_led,   // blank
+  12 + start_led,  // blue
+  26 + start_led + 1 ,  // yellow
+  38 + start_led + 2,  // purple
+  48 + start_led + 2,  // green
+  57 + start_led + 2, // orange
+  68 + start_led + 3, // white
 };
 
 CRGB addr_led_colors[7] = {
@@ -135,7 +137,7 @@ void addr_led_turn_off() {
 
 void addr_led_off(CRGB leds[]) {
   addr_led_setRange(0, addr_led_numLeds, addr_led_colors[0], leds);
-  addr_led_render(); // TODO remove
+  addr_led_render();
 }
 
 void addr_led_setRange(int start, int end, CRGB color) {
