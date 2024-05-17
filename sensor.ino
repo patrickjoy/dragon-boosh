@@ -2,12 +2,12 @@
 
 const int sensor_count = 6;
 const int sensorPins[sensor_count] {
-  A0,
-  A1,
-  A2,
-  A3,
-  A4,
-  A5
+  A0, // Rat
+  A1, // Chicken
+  A2, // Horse
+  A3, // Ox
+  A4, // Tiger
+  A5  // Dragon
 };
 
 void sensor_setup() {
