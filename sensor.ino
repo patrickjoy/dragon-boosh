@@ -34,7 +34,7 @@ State sensor_checkPins(State state) {
   return state;
 }
 
-const unsigned long testRate = 250;
+const unsigned long testRate = 400;
 unsigned long lastTest = 0;
 State sensor_test(State state) {
   unsigned long currentTime = millis();
@@ -45,10 +45,10 @@ State sensor_test(State state) {
     // Serial.println(value);
 
     if (value < SENSOR_THRESHOLD) {
-      // Serial.println("Magnet detected");
+      Serial.println("Magnet detected");
       State tmpState = static_cast<State>(state + 1);
-      // Serial.print("Sent to state: ");
-      // Serial.println(tmpState);
+      Serial.print("Sent to state: ");
+      Serial.println(tmpState);
       lastTest = millis();
       return tmpState;
     }

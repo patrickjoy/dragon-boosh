@@ -27,7 +27,8 @@ enum Response {
 };
 
 const unsigned long stateTimeout = 500;
-const unsigned long resetTime = 28000; // (celebration songs are 28 seconds long)
+const unsigned long celebrationTime = 28000; // (celebration music is 28 seconds long)
+const unsigned long resetTime = 10000; // (reset sounds are 14 seconds long)
 unsigned long lastStateUpdate = 0;
 
 State currentState = READY;
@@ -63,8 +64,8 @@ void loop() {
       if (!playing) {
         mp3_playRandomSong(); // 8 milliseconds
       }
-      // State state = sensor_checkPins(currentState);
-      State state = sensor_test(currentState);
+      State state = sensor_checkPins(currentState);
+      // State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
@@ -73,8 +74,8 @@ void loop() {
     case THREE:
     case FOUR:
     case FIVE: { // hall effects 1-5
-      // State state = sensor_checkPins(currentState);
-      State state = sensor_test(currentState);
+      State state = sensor_checkPins(currentState);
+      // State state = sensor_test(currentState);
       checkForUpdate(state);
       break;
     }
@@ -93,7 +94,7 @@ void loop() {
       new_led_setState(score);
       led_ctl_celebrationSequence(score);
       
-      resetWhenReady();
+      resetWhenReady(score);
       break;
     }
   }
@@ -104,9 +105,10 @@ void loop() {
   // Serial.println(startTime);
 }
 
-void resetWhenReady() {
+void resetWhenReady(State score) {
+  unsigned long waitTime = (score == SIX) ? celebrationTime : resetTime;
   unsigned long currentTime = millis();
-  if (currentTime - lastStateUpdate >= resetTime) {
+  if (currentTime - lastStateUpdate >= waitTime) {
     boosh_reset();
     led_ctl_reset();
     new_led_reset();

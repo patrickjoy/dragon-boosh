@@ -30,11 +30,11 @@ unsigned long mp3_songLengths[32] = {
   408000, // Song 19 // 360 + 48
   115000, // Song 20 // 60 + 55
   345000, // Song 21 // 300 + 45
-  28000, // Song 22 rat
-  28000, // Song 23 rooster
-  28000, // Song 24 horse
-  28000, // Song 25 ox
-  28000, // Song 26 tiger
+  10000, // Song 22 rat
+  10000, // Song 23 rooster
+  10000, // Song 24 horse
+  10000, // Song 25 ox
+  10000, // Song 26 tiger
   28000, // Song 27 dragon
   1000, // Song 28 one
   1000, // Song 29 two
@@ -93,12 +93,12 @@ void mp3_playSong(int song) {
 
 void mp3_playCelebration(State state) {
   if (mp3_celebrationPlayed) return;
-  if (state == ONE) mp3_playSong(23);
-  else if (state == TWO) mp3_playSong(24);
-  else if (state == THREE) mp3_playSong(25);
-  else if (state == FOUR) mp3_playSong(26);
-  else if (state == FIVE) mp3_playSong(27);
-  else if (state == SIX) mp3_playSong(28);
+  if (state == ONE) mp3_playSong(mp3_lastSong + 1);
+  else if (state == TWO) mp3_playSong(mp3_lastSong + 2);
+  else if (state == THREE) mp3_playSong(mp3_lastSong + 3);
+  else if (state == FOUR) mp3_playSong(mp3_lastSong + 4);
+  else if (state == FIVE) mp3_playSong(mp3_lastSong + 5);
+  else if (state == SIX) mp3_playSong(mp3_lastSong + 6);
   mp3_celebrationPlayed = true;
 }
 
