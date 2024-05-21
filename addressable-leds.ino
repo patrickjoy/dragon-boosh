@@ -172,3 +172,18 @@ void addr_led_render(CRGB leds[]) {
     addr_led_lastRenderTime = millis();
   }
 }
+
+// void addr_test() {
+//   while(true) {
+//     delay(250);
+//     addr_led_turn_off();
+//     delay(250);
+
+//     for(int i = 0; i < addr_led_numLeds; i++) {
+//       displayLeds[i] = CRGB(CRGB::Yellow);
+//       delay(20);
+//       FastLED.show();
+//       delay(250);
+//     }
+//   }
+// }
