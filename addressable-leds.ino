@@ -106,7 +106,7 @@ int addr_led_animateClimb(State state, unsigned long pause) {
       addr_led_render();
       addr_led_climbStarted = true;
     } else if (addr_led_nextLedToRender < limit) {
-      // update two leds at a time
+      // update multiple leds at a time
       for (int i = 0; i < 3; i++) {
         if (addr_led_nextLedToRender >= limit) break;
         addr_led_setColor(addr_led_nextLedToRender, goalLeds[addr_led_nextLedToRender]);
@@ -122,8 +122,8 @@ int addr_led_animateClimb(State state, unsigned long pause) {
   return addr_led_numClimbs;
 }
 
-void addr_led_blink(bool on, State score) {
-  if(on) {
+void addr_led_blink(bool blink, State score) {
+  if(blink) {
     addr_led_turn_off();
   } else {
     addr_led_setState(score);
